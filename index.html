@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ፈለገ ህይወት ሰንበት ትምህርት ቤት</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.min.js"></script>
+    
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            min-height: 100vh;
+        }
+
+        /* View transitions */
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+
+        /* Custom colors */
+        .text-primary-teal {
+            color: #0d9488;
+        }
+        .bg-primary-teal {
+            background-color: #0d9488;
+        }
+        .border-primary-teal {
+            border-color: #0d9488;
+        }
+        .text-text-dark {
+            color: #1E293B;
+        }
+
+        /* Card styling */
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* Tab button styling */
+        .tab-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Support specific styles */
+        .support-card {
+            transition: transform 0.3s ease;
+        }
+        .support-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Social media icon styling */
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* PDF Button Styles */
+        .pdf-button {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .pdf-button:hover {
+            background-color: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.5);
+        }
+
+        .csv-button {
+            background-color: #059669;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .csv-button:hover {
+            background-color: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.5);
+        }
+
+        .report-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            border-color: #0d9488;
+            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Content Wrapper -->
+    <div class="min-h-screen flex flex-col">
+        
+        <!-- Header & Navigation -->
+        <header class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <!-- Logo/System Name -->
+                <a href="#" id="home-link" class="text-2xl md:text-3xl font-extrabold text-primary-teal flex items-center tracking-tight">
+                    <svg class="w-8 h-8 mr-2 text-text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.247"></path>
+                    </svg>
+                    ፈለገ ህይወት ሰንበት ትምህርት ቤት
+                </a>
+                
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-4">
+                    <!-- Support Link -->
+                    <a href="#" id="support-link" class="text-text-dark border border-gray-300 py-2 px-4 md:px-6 rounded-lg font-semibold hover:bg-gray-100 transition duration-200">
+                        <i class="fas fa-question-circle mr-2"></i>እርዳታ
+                    </a>
+                    
+                    <!-- User Display (only when logged in) -->
+                    <div id="user-display" class="hidden text-sm font-medium text-gray-700">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                    
+                    <!-- Logout Button (only when logged in) -->
+                    <button id="logout-btn" class="hidden btn-primary bg-red-500 hover:bg-red-700" onclick="logout()">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Views -->
+        <main class="flex-grow">
+            <!-- Login View -->
+            <div id="login-view" class="view active">
+                <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+                           የ ፈለገ ህይወት ሰንበት ተማሪዋች<br> <span class="text-primary-teal">ውጤት ማያ እና የ አገልግሎት አቴንዳስ ማያ</span>
+                        </h1>
+                        <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
+                        ይህን ሲስተም መጠቀም የሚችሉት አባል የሆኑ ብቻ ናቸው ለበለጠ መረጃ እርዳታ የሚለውን ይጫኑ
+                        </p>
+                    </div>
+
+                    <!-- Login Form Card -->
+                    <div class="max-w-md mx-auto card p-6 md:p-8">
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center"> Login</h2>
+                        <form id="login-form" onsubmit="event.preventDefault(); login();">
+                            <div class="mb-4">
+                                <label for="login-username" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-user mr-2"></i>Username
+                                </label>
+                                <input type="text" id="login-username" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-lock mr-2"></i>Password
+                                </label>
+                                <input type="password" id="login-password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <button type="submit" class="btn-primary w-full flex items-center justify-center">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Log In
+                            </button>
+                        </form>
+                        <div id="login-message" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support/Help Center View -->
+            <div id="support-view" class="view">
+                <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                    <!-- Back to Login Button -->
+                    <div class="mb-6">
+                        <button id="back-to-login" class="text-primary-teal hover:text-teal-700 font-medium flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to Login
+                        </button>
+                    </div>
+                    
+                    <!-- Support Center Header -->
+                    <div class="text-center mb-12">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+                            <i class="fas fa-life-ring text-primary-teal mr-3"></i>እርዳታ
+                        </h1>
+                        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                         ለየት ያለ ጥያቄ ካለ እዚ ላይ ባሉ ቁጥሮች ያናግሩን
+                        </p>
+                    </div>
+
+                    <!-- Contact Information Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                        <!-- Phone Support Card -->
+                        <div class="card p-6 support-card border-t-4 border-blue-500">
+                            <div class="text-blue-500 mb-4">
+                                <i class="fas fa-phone-alt text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">ስለዚ websit ጥያቂ ካለ</h3>
+                            <p class="text-gray-600 mb-4"></p>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <i class="fas fa-phone text-green-500 mr-3"></i>
+                                    <div>
+                                        <p class="font-semibold">Dagim Dawit</p>
+                                        <a href="tel:+1-800-123-4567" class="text-lg font-bold text-gray-900 hover:text-blue-600">0919042374</a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-mobile-alt text-blue-500 mr-3"></i>
+                                    <div>
+                                        <p class="font-semibold">Dagim Dawit</p>
+                                        <a href="tel:+1-800-987-6543" class="text-lg font-bold text-gray-900 hover:text-blue-600">0777162669</a>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500 mt-2">
+                                  
+                                </div>
+                            </div>
+                        </div>
+
+                      
+
+                        <!-- FAQ Card -->
+                        <div class="card p-6 support-card border-t-4 border-purple-500">
+                            <div class="text-purple-500 mb-4">
+                                <i class="fas fa-question-circle text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">ሊረዱ የሚችሉ የጥያቄ መልሶች</h3>
+                            <p class="text-gray-600 mb-4"></p>
+                            <div class="space-y-3">
+                                <div class="border-b pb-3">
+                                    <p class="font-semibold text-gray-800 mb-1">የይለፍ ቃል ወይም username ከተረሳ</p>
+                                    <p class="text-sm text-gray-600">Cይለፍ ቃል ከረሳቹ ዳግም ዳዊት በሚለው ቁጥር ቴሌግራም ላይ የናግሩን</p>
+                                </div>
+                                <div class="border-b pb-3">
+                                    <p class="font-semibold text-gray-800 mb-1">የትምህት ውጤት ችግር ካለ </p>
+                                    <p class="text-sm text-gray-600">የትምህት ውጤት ችግር ካለ ከስ ከተዘረዘሩት የትምህርት ክፍል አባሎችን ያናግሩ</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 mb-1">በአቴንዳስ ላይ ችግር ካለ</p>
+                                    <p class="text-sm text-gray-600">ከስር ከተዘረዘሩት ግንኙነት ክፍል አባላት አናግሩ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <!-- Campus Contact Information -->
+                    <div class="card p-6 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-university text-primary-teal mr-3"></i> የግንኙነት ክፍል
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ዋና ተጠሪ</h4>
+                                <p class="text-gray-600 text-sm mb-1">........</p>
+                                <a href="tel:+1-800-555-1001" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 1</h4>
+                                <p class="text-gray-600 text-sm mb-1">...........</p>
+                                <a href="tel:+1-800-555-1002" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 2</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1003" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 3</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1004" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                        </div>
+                    </div>
+  <!-- Campus Contact Information -->
+                    <div class="card p-6 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-university text-primary-teal mr-3"></i> የትምህት ክፍል
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ዋና ተጠሪ</h4>
+                                <p class="text-gray-600 text-sm mb-1">........</p>
+                                <a href="tel:+1-800-555-1001" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 1</h4>
+                                <p class="text-gray-600 text-sm mb-1">...........</p>
+                                <a href="tel:+1-800-555-1002" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 2</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1003" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 3</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1004" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Campus Contact Information -->
+                    <div class="card p-6 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-university text-primary-teal mr-3"></i>የመዝሙር ክፍል
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ዋና ተጠሪ</h4>
+                                <p class="text-gray-600 text-sm mb-1">........</p>
+                                <a href="tel:+1-800-555-1001" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 1</h4>
+                                <p class="text-gray-600 text-sm mb-1">...........</p>
+                                <a href="tel:+1-800-555-1002" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 2</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1003" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-2">ኮሚቴ 3</h4>
+                                <p class="text-gray-600 text-sm mb-1">.........</p>
+                                <a href="tel:+1-800-555-1004" class="text-blue-600 font-medium">+2519</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Main App View (Dashboard/Admin Panel) -->
+            <div id="app-view" class="view">
+                <!-- Content will be rendered here by JavaScript -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t mt-8">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-600 text-sm">
+                            &copy; 2024 ፈለገ ህይወት ሰንበት ትምህርት ቤት. All rights reserved.
+                        </p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" id="footer-support-link" class="text-sm text-gray-600 hover:text-primary-teal">
+                            <i class="fas fa-question-circle mr-2"></i>Support
+                        </a>
+                        <a href="#" id="footer-login-link" class="text-sm text-gray-600 hover:text-primary-teal">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript for the entire application -->
+    <script>
+        // --- DATA STRUCTURES (Simulated Database) ---
+        let state = {
+            isLoggedIn: false,
+            user: null, // { username, role: 'admin' | 'student', studentId }
+            currentView: 'login', // 'login', 'support', 'app'
+            activeAdminTab: 'students',
+            imageData: null // Temporary storage for image data
+        };
+
+        const defaultData = {
+            homeContent: {
+                title: "Welcome to the Academic Portal",
+                body: "This is the central hub for managing student grades and attendance. Log in to access your dashboard or administration tools.",
+                features: [
+                    "Real-time Attendance Tracking",
+                    "Secure Grade Reporting",
+                    "Admin Content Management",
+                    "Detailed Permission Logs"
+                ]
+            },
+            students: [
+                { 
+                    id: 'S001', 
+                    name: 'yeadonay hailu', 
+                    username: 'yado', 
+                    password: 'yh123',
+                    profileImage: '', // Base64 placeholder
+                    address: 'Addis Ababa, Ethiopia',
+                    phone: '0912345678',
+                    familyPhone: '0911123456',
+                    enrollmentDate: '2023-09-01',
+                    birthDate: '2005-05-15',
+                    gender: 'Male',
+                    fatherName: 'Hailu Mengistu',
+                    motherName: 'Marta Getachew',
+                    fatherPhone: '0912345001',
+                    motherPhone: '0912345002'
+                },
+                { 
+                    id: 'S002', 
+                    name: 'Dagim Dawit', 
+                    username: 'dagi', 
+                    password: 'dd123',
+                    profileImage: 'd1.jpg',
+                    phone: '0919042374',
+                    familyPhone: '0911123457',
+                    enrollmentDate: '2023-09-01',
+                    birthDate: '2005-06-20',
+                    gender: 'Male',
+                    fatherName: 'Dawit Tesfaye',
+                    motherName: 'Eleni Bekele',
+                    fatherPhone: '0912345003',
+                    motherPhone: '0912345004'
+                },
+                { 
+                    id: 'S003', 
+                    name: 'girma moges', 
+                    username: 'germa', 
+                    password: 'gm123',
+                    profileImage: '',
+                    address: 'Addis Ababa, Ethiopia',
+                    phone: '0912345679',
+                    familyPhone: '0911123458',
+                    enrollmentDate: '2023-09-01',
+                    birthDate: '2005-07-10',
+                    gender: 'Male',
+                    fatherName: 'Moges Hailu',
+                    motherName: 'Selamawit Tadesse',
+                    fatherPhone: '0912345005',
+                    motherPhone: '0912345006'
+                },
+                { 
+                    id: 'S004', 
+                    name: 'surafel abeb', 
+                    username: 'sura', 
+                    password: 'sa123',
+                    profileImage: '',
+                    address: 'Addis Ababa, Ethiopia',
+                    phone: '0912345680',
+                    familyPhone: '0911123459',
+                    enrollmentDate: '2023-09-01',
+                    email: 'surafel@example.com',
+                    birthDate: '2005-08-25',
+                    gender: 'Male',
+                    fatherName: 'Abebe Kebede',
+                    motherName: 'Muluwork Assefa',
+                    fatherPhone: '0912345007',
+                    motherPhone: '0912345008'
+                },
+            ],
+            admins: [
+                { id: 'A001', name: 'System Admin', username: 'admin', password: 'admi81' }
+            ],
+            grades: {
+                'S001': [{ subject: 'የመፀሀፍ ቅዱስ ጥናት', grade: '85' }, { subject: 'ክርስቲያናዊ ስነምግባር', grade: '60' }],
+                'S002': [{ subject: 'የመፀሀፍ ቅዱስ ጥናት', grade: '80' }, { subject: 'ክርስቲያናዊ ስነምግባር', grade: '80' }],
+                'S003': [{ subject: 'የመፀሀፍ ቅዱስ ጥናት', grade: '90' }, { subject: 'ክርስቲያናዊ ስነምግባር', grade: '90' }],
+                'S004': [{ subject: 'የመፀሀፍ ቅዱስ ጥናት', grade: '60' }, { subject: 'ክርስቲያናዊ ስነምግባር', grade: '60' }],
+            },
+            attendance: {
+                'S001': [
+                    { date: '2024-10-01', status: 'Present' },
+                    { date: '2024-10-02', status: 'Absent' },
+                    { date: '2024-10-03', status: 'Permission', reason: 'teda' },
+                    { date: '2024-10-04', status: 'Present' },
+                    { date: '2024-10-05', status: 'Permanent Permission', reason: 'eateh' },
+                    { date: '2024-10-06', status: 'Daily Permission', reason: 'uuuuuu' },
+                ],
+                'S002': [
+                    { date: '2024-10-01', status: 'Present' },
+                    { date: '2024-10-02', status: 'Present' },
+                    { date: '2024-10-03', status: 'Absent', reason: 'Family Emergency' },
+                ],
+                'S003': [
+                    { date: '2024-10-01', status: 'Present' },
+                    { date: '2024-10-02', status: 'Present' },
+                    { date: '2024-10-03', status: 'Daily Permission', reason: 'Medical Checkup' },
+                ],
+                'S004': [
+                    { date: '2024-10-01', status: 'Present' },
+                    { date: '2024-10-02', status: 'Present' },
+                    { date: '2024-10-03', status: 'Present' },
+                ]
+            }
+        };
+
+        let data = JSON.parse(localStorage.getItem('smsData')) || defaultData;
+
+        // --- UTILITY FUNCTIONS ---
+
+        function saveData() {
+            localStorage.setItem('smsData', JSON.stringify(data));
+        }
+
+        function generateId(prefix) {
+            return prefix + Math.random().toString(16).slice(2, 8).toUpperCase();
+        }
+
+        // --- IMAGE HANDLING FUNCTIONS ---
+
+        function previewProfileImage(input) {
+            const previewContainer = document.getElementById('imagePreview');
+            const previewIcon = previewContainer.querySelector('.fa-user');
+            const previewImage = document.getElementById('previewImage');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Store image data temporarily
+                    state.imageData = e.target.result;
+                    
+                    // Update preview
+                    if (previewImage) {
+                        previewImage.src = state.imageData;
+                        previewImage.classList.remove('hidden');
+                    }
+                    
+                    // Hide the icon
+                    if (previewIcon) {
+                        previewIcon.style.display = 'none';
+                    }
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- VIEW MANAGEMENT ---
+
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Show the requested view
+            document.getElementById(`${viewName}-view`).classList.add('active');
+            state.currentView = viewName;
+            
+            // Update header visibility
+            updateUI();
+        }
+
+        // --- AUTHENTICATION ---
+
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            let user = null;
+            let role = null;
+
+            // Check Admins
+            const admin = data.admins.find(a => a.username === username && a.password === password);
+            if (admin) {
+                user = admin;
+                role = 'admin';
+            }
+
+            // Check Students
+            const student = data.students.find(s => s.username === username && s.password === password);
+            if (student) {
+                user = student;
+                role = 'student';
+            }
+
+            const messageBox = document.getElementById('login-message');
+            if (user) {
+                state.isLoggedIn = true;
+                state.user = { ...user, role: role, studentId: student ? student.id : null };
+                
+                // Clear the form
+                document.getElementById('login-form').reset();
+                
+                // Show app view and render appropriate dashboard
+                showView('app');
+                renderAppView();
+            } else {
+                messageBox.innerHTML = `
+                    <div class="p-3 bg-red-100 text-red-700 rounded-lg flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-3"></i>
+                        <span>Invalid username or password. Please try again.</span>
+                    </div>
+                `;
+            }
+            updateUI();
+        }
+
+        function logout() {
+            state.isLoggedIn = false;
+            state.user = null;
+            showView('login');
+            updateUI();
+        }
+
+        // --- UI & NAVIGATION ---
+
+        function updateUI() {
+            const userDisplay = document.getElementById('user-display');
+            const logoutBtn = document.getElementById('logout-btn');
+            const homeLink = document.getElementById('home-link');
+
+            if (state.isLoggedIn) {
+                userDisplay.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-lg mr-2"></i>
+                        <div>
+                            <div class="font-semibold">${state.user.name}</div>
+                            <div class="text-xs text-gray-500">${state.user.role}</div>
+                        </div>
+                    </div>
+                `;
+                userDisplay.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+                
+                // Update home link to go to dashboard
+                homeLink.setAttribute('href', '#');
+                homeLink.onclick = (e) => {
+                    e.preventDefault();
+                    showView('app');
+                    renderAppView();
+                };
+            } else {
+                userDisplay.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+                
+                // Update home link to go to login
+                homeLink.setAttribute('href', '#');
+                homeLink.onclick = (e) => {
+                    e.preventDefault();
+                    showView('login');
+                };
+            }
+        }
+
+        // --- SUPPORT CENTER FUNCTIONS ---
+
+        function submitSupportRequest() {
+            const name = document.getElementById('support-name').value;
+            const email = document.getElementById('support-email').value;
+            const subject = document.getElementById('support-subject').value;
+            const message = document.getElementById('support-message').value;
+            
+            const messageBox = document.getElementById('support-message');
+            
+            // Simulate form submission
+            messageBox.innerHTML = `
+                <div class="p-4 bg-green-100 text-green-700 rounded-lg flex items-center">
+                    <i class="fas fa-check-circle mr-3 text-xl"></i>
+                    <div>
+                        <p class="font-semibold">Thank you, ${name}!</p>
+                        <p class="text-sm">Your support request has been submitted. We'll respond to <strong>${email}</strong> within 24 hours.</p>
+                    </div>
+                </div>
+            `;
+            
+            // Clear the form
+            document.getElementById('support-form').reset();
+            
+            // Scroll to message
+            messageBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- PAGE RENDERING FUNCTIONS ---
+
+        function renderAppView() {
+            const container = document.getElementById('app-view');
+            
+            if (!state.isLoggedIn) {
+                showView('login');
+                return;
+            }
+
+            if (state.user.role === 'admin') {
+                container.innerHTML = renderAdminPanel();
+                renderAdminContent();
+            } else if (state.user.role === 'student') {
+                container.innerHTML = renderStudentDashboard();
+            } else {
+                container.innerHTML = renderUnauthorized();
+            }
+        }
+
+        function renderStudentDashboard() {
+            if (state.user.role !== 'student') { return renderUnauthorized(); }
+            const studentId = state.user.studentId;
+            const student = data.students.find(s => s.id === studentId);
+            const studentGrades = data.grades[studentId] || [];
+            const studentAttendance = data.attendance[studentId] || [];
+
+            // Calculate Attendance Summary
+            const summary = studentAttendance.reduce((acc, entry) => {
+                if (entry.status === 'Present') acc.present++;
+                else if (entry.status === 'Absent') acc.absent++;
+                else if (entry.status.includes('Permission')) acc.permission++;
+                return acc;
+            }, { present: 0, absent: 0, permission: 0 });
+
+            // Calculate days since enrollment
+            const enrollmentDate = new Date(student.enrollmentDate);
+            const today = new Date();
+            const daysSinceEnrollment = Math.floor((today - enrollmentDate) / (1000 * 60 * 60 * 24));
+
+            return `
+                <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                    <!-- Student Profile Header -->
+                    <div class="card p-6 mb-8">
+                        <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                            <!-- Profile Image -->
+                            <div class="relative">
+                                <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                                    ${student.profileImage ? 
+                                        `<img src="${student.profileImage}" alt="${student.name}" class="w-full h-full object-cover">` : 
+                                        `<div class="w-full h-full flex items-center justify-center bg-primary-teal text-white text-4xl">
+                                            <i class="fas fa-user"></i>
+                                        </div>`
+                                    }
+                                </div>
+                                <div class="absolute -bottom-2 -right-2 bg-primary-teal text-white rounded-full p-2">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Profile Info -->
+                            <div class="flex-grow text-center md:text-left">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                    <div>
+                                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">${student.name}</h2>
+                                        <p class="text-gray-600">Student ID: ${student.id}</p>
+                                    </div>
+                                    <div class="mt-4 md:mt-0 flex space-x-2">
+                                        <span class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 font-semibold">
+                                            <i class="fas fa-user-graduate mr-2"></i>Student
+                                        </span>
+                                       
+                                    </div>
+                                </div>
+                                
+                                <!-- Contact Info -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-phone text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Phone</p>
+                                            <p class="font-medium">${student.phone || 'Not provided'}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-green-100 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-home text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Address</p>
+                                            <p class="font-medium">${student.address || 'Not provided'}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-calendar-alt text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Enrolled Since</p>
+                                            <p class="font-medium">${student.enrollmentDate || 'N/A'}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                                            <i class="fas fa-history text-yellow-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Days Enrolled</p>
+                                            <p class="font-medium">${daysSinceEnrollment} days</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Family Information -->
+                                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                        <i class="fas fa-users text-primary-teal mr-3"></i>Family Information
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <p class="text-sm text-gray-500">Father's Name</p>
+                                            <p class="font-medium">${student.fatherName || 'Not provided'}</p>
+                                            ${student.fatherPhone ? `<p class="text-xs text-gray-500 mt-1">Phone: ${student.fatherPhone}</p>` : ''}
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-500">Mother's Name</p>
+                                            <p class="font-medium">${student.motherName || 'Not provided'}</p>
+                                            ${student.motherPhone ? `<p class="text-xs text-gray-500 mt-1">Phone: ${student.motherPhone}</p>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Additional Info -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Email</p>
+                                        <p class="font-medium">${student.email || 'Not provided'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Family Phone</p>
+                                        <p class="font-medium">${student.familyPhone || 'Not provided'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Birth Date</p>
+                                        <p class="font-medium">${student.birthDate || 'Not provided'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Gender</p>
+                                        <p class="font-medium">${student.gender || 'Not provided'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        ${renderSummaryCard('Present Days', summary.present, 'bg-green-100 text-green-700', 'bg-green-500', 'fas fa-check-circle')}
+                        ${renderSummaryCard('Absent Days', summary.absent, 'bg-red-100 text-red-700', 'bg-red-500', 'fas fa-times-circle')}
+                        ${renderSummaryCard('Permissions', summary.permission, 'bg-yellow-100 text-yellow-700', 'bg-yellow-500', 'fas fa-clipboard-check')}
+                        ${renderSummaryCard('Total Days', studentAttendance.length, 'bg-blue-100 text-blue-700', 'bg-blue-500', 'fas fa-calendar-alt')}
+                    </div>
+
+                    <!-- Grades Table -->
+                    <div class="card p-4 sm:p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-graduation-cap text-primary-teal mr-3"></i>
+                                የትምህት ውጤት
+                            </h3>
+                           
+                        </div>
+                        ${studentGrades.length > 0 ? `
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        ${studentGrades.map(g => `
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${g.subject}</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(g.grade)}">
+                                                        ${g.grade}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                    <i class="fas fa-check text-green-500 mr-2"></i>Recorded
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : '<p class="text-gray-500 p-4 text-center">No grades recorded yet.</p>'}
+                    </div>
+
+                    <!-- Detailed Attendance Log -->
+                    <div class="card p-4 sm:p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <i class="fas fa-calendar-alt text-primary-teal mr-3"></i>
+                               አቴንዳስ
+                            </h3>
+                           
+                        </div>
+                        ${studentAttendance.length > 0 ? `
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details/Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        ${studentAttendance.slice().reverse().map(a => `
+                                            <tr class="${getAttendanceRowColor(a.status)} hover:bg-gray-50">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${a.date}</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(a.status)}">
+                                                        <i class="fas ${getStatusIcon(a.status)} mr-2"></i>
+                                                        ${a.status}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-4 text-sm text-gray-700">${a.reason || 'N/A'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : '<p class="text-gray-500 p-4 text-center">No attendance data recorded yet.</p>'}
+                    </div>
+                    
+                    <!-- Profile Actions -->
+                    <div class="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                        <h4 class="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+                            <i class="fas fa-user-cog mr-3"></i>Profile Management
+                        </h4>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="btn-primary bg-blue-600 hover:bg-blue-700" onclick="updateStudentProfile('${studentId}')">
+                                <i class="fas fa-user-edit mr-2"></i>Update Profile
+                            </button>
+                            <button class="btn-primary bg-purple-600 hover:bg-purple-700" onclick="changePassword('${studentId}')">
+                                <i class="fas fa-key mr-2"></i>Change Password
+                            </button>
+                            
+                            <button class="btn-primary bg-green-600 hover:bg-green-700" onclick="showView('support')">
+                                <i class="fas fa-question-circle mr-2"></i>ችግር ካለ ለማመልከት
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSummaryCard(title, value, bgColor, barColor, iconClass) {
+            return `
+                <div class="card p-6 ${bgColor} overflow-hidden relative">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="text-sm font-medium text-gray-700">${title}</div>
+                        <i class="${iconClass} text-2xl opacity-70"></i>
+                    </div>
+                    <div class="text-4xl font-bold">${value}</div>
+                    <div class="absolute inset-y-0 right-0 w-1/5 ${barColor} opacity-20"></div>
+                </div>
+            `;
+        }
+
+        function getGradeColor(grade) {
+            if (grade.includes('A') || grade.includes('+')) return 'bg-green-100 text-green-800';
+            if (grade.includes('B')) return 'bg-blue-100 text-blue-800';
+            if (grade.includes('C')) return 'bg-yellow-100 text-yellow-800';
+            if (grade.includes('D') || grade.includes('F')) return 'bg-red-100 text-red-800';
+            return 'bg-gray-100 text-gray-800';
+        }
+
+        function getAttendanceRowColor(status) {
+            if (status === 'Absent') return 'bg-red-50';
+            if (status.includes('Permission')) return 'bg-yellow-50';
+            return '';
+        }
+
+        function getStatusBadgeColor(status) {
+            if (status === 'Present') return 'bg-green-100 text-green-800';
+            if (status === 'Absent') return 'bg-red-100 text-red-800';
+            return 'bg-yellow-100 text-yellow-800';
+        }
+
+        function getStatusIcon(status) {
+            if (status === 'Present') return 'fa-check';
+            if (status === 'Absent') return 'fa-times';
+            return 'fa-clipboard-check';
+        }
+
+        // --- ADMIN PANEL FUNCTIONS ---
+
+        function renderAdminPanel() {
+            if (state.user.role !== 'admin') { return renderUnauthorized(); }
+            
+            return `
+                <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                    <div class="mb-8">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 flex items-center">
+                                    <i class="fas fa-cogs text-primary-teal mr-3"></i>
+                                    Admin Control Panel
+                                </h2>
+                                <p class="text-gray-600 mt-2">Manage students, grades, attendance, and system content.</p>
+                            </div>
+                            <div class="mt-4 md:mt-0 flex space-x-2">
+                                <button onclick="downloadAllStudentsPDF()" class="btn-primary bg-red-600 hover:bg-red-700 flex items-center">
+                                    <i class="fas fa-users mr-2"></i>Export All Students
+                                </button>
+                                <button onclick="downloadSystemReport()" class="btn-primary bg-purple-600 hover:bg-purple-700 flex items-center">
+                                    <i class="fas fa-file-alt mr-2"></i>System Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="flex flex-wrap gap-2 border-b border-gray-200 mb-6 pb-2">
+                        ${renderAdminTabButton('students', 'fas fa-users', 'Student Management')}
+                        ${renderAdminTabButton('grades', 'fas fa-graduation-cap', 'Grade Entry')}
+                        ${renderAdminTabButton('attendance', 'fas fa-calendar-check', 'Attendance & Permission')}
+                        ${renderAdminTabButton('home_cms', 'fas fa-edit', 'Home Page CMS')}
+                        ${renderAdminTabButton('reports', 'fas fa-file-pdf', 'Reports & Exports')}
+                    </div>
+
+                    <!-- Tab Content Area -->
+                    <div id="admin-content-area" class="card p-4 sm:p-6">
+                        <!-- Content rendered by renderAdminContent() -->
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+                        <div class="bg-white p-4 rounded-lg border shadow-sm">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-users text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Total Students</p>
+                                    <p class="text-2xl font-bold">${data.students.length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border shadow-sm">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-graduation-cap text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Grade Records</p>
+                                    <p class="text-2xl font-bold">${Object.values(data.grades).flat().length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border shadow-sm">
+                            <div class="flex items-center">
+                                <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-calendar-alt text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Attendance Entries</p>
+                                    <p class="text-2xl font-bold">${Object.values(data.attendance).flat().length}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdminTabButton(tabName, iconClass, label) {
+            const isActive = state.activeAdminTab === tabName;
+            return `<button class="tab-button ${isActive ? 'active' : 'text-gray-600 hover:bg-gray-100'} flex items-center" 
+                            onclick="setActiveAdminTab('${tabName}')">
+                        <i class="${iconClass} mr-2"></i>${label}
+                    </button>`;
+        }
+
+        function setActiveAdminTab(tabName) {
+            state.activeAdminTab = tabName;
+            renderAdminContent();
+        }
+        
+        // --- ADMIN SUB-RENDERING ---
+
+        function renderAdminContent() {
+            const contentArea = document.getElementById('admin-content-area');
+            if (!contentArea) return;
+
+            let contentHtml = '';
+            
+            switch (state.activeAdminTab) {
+                case 'students':
+                    contentHtml = renderStudentManagement();
+                    break;
+                case 'grades':
+                    contentHtml = renderGradeManagement();
+                    break;
+                case 'attendance':
+                    contentHtml = renderAttendanceManagement();
+                    break;
+                case 'home_cms':
+                    contentHtml = renderHomeCMS();
+                    break;
+                case 'reports':
+                    contentHtml = renderReportsTab();
+                    break;
+            }
+            contentArea.innerHTML = contentHtml;
+        }
+
+        function renderStudentManagement() {
+            return `
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-users text-primary-teal mr-3"></i>Manage Students
+                </h3>
+
+                <!-- Add New Student Form -->
+                <div class="bg-blue-50 p-6 rounded-lg mb-6 border border-blue-200">
+                    <h4 class="text-lg font-medium mb-4 text-blue-800">Add New Student</h4>
+                    <form onsubmit="event.preventDefault(); addStudent(this);" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Left Column -->
+                        <div class="space-y-4">
+                            <h5 class="font-medium text-gray-700">Basic Information</h5>
+                            <input type="text" name="name" placeholder="Full Name" required class="p-3 border rounded-lg w-full">
+                            <input type="text" name="username" placeholder="Username" required class="p-3 border rounded-lg w-full">
+                            <input type="password" name="password" placeholder="Password" required class="p-3 border rounded-lg w-full">
+                            <input type="email" name="email" placeholder="Email Address" class="p-3 border rounded-lg w-full">
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="date" name="birthDate" placeholder="Birth Date" class="p-3 border rounded-lg">
+                                <select name="gender" class="p-3 border rounded-lg bg-white">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column -->
+                        <div class="space-y-4">
+                            <h5 class="font-medium text-gray-700">Contact & Enrollment</h5>
+                            <input type="text" name="phone" placeholder="Phone Number" class="p-3 border rounded-lg w-full">
+                            <input type="text" name="familyPhone" placeholder="Family Phone Number" class="p-3 border rounded-lg w-full">
+                            <input type="text" name="address" placeholder="Address" class="p-3 border rounded-lg w-full">
+                            <input type="date" name="enrollmentDate" value="${new Date().toISOString().slice(0, 10)}" required class="p-3 border rounded-lg w-full">
+                            
+                            <h5 class="font-medium text-gray-700 mt-4">Family Information</h5>
+                            <input type="text" name="fatherName" placeholder="Father's Full Name" class="p-3 border rounded-lg w-full">
+                            <input type="text" name="motherName" placeholder="Mother's Full Name" class="p-3 border rounded-lg w-full">
+                            <input type="text" name="fatherPhone" placeholder="Father's Phone" class="p-3 border rounded-lg w-full">
+                            <input type="text" name="motherPhone" placeholder="Mother's Phone" class="p-3 border rounded-lg w-full">
+                            
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                                <div class="flex items-center space-x-4">
+                                    <input type="file" name="profileImage" id="profileImageInput" accept="image/*" class="hidden" onchange="previewProfileImage(this)">
+                                    <label for="profileImageInput" class="cursor-pointer p-2 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-blue-500">
+                                        <i class="fas fa-camera text-gray-400 text-2xl mb-2"></i>
+                                        <p class="text-sm text-gray-500">Upload Image</p>
+                                    </label>
+                                    <div id="imagePreview" class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            <i class="fas fa-user text-gray-400 text-2xl"></i>
+                                        </div>
+                                        <img id="previewImage" src="" alt="" class="w-full h-full object-cover hidden">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="md:col-span-2">
+                            <button type="submit" class="btn-primary flex items-center justify-center w-full">
+                                <i class="fas fa-user-plus mr-2"></i>Add Student
+                            </button>
+                        </div>
+                    </form>
+                    <p id="student-msg" class="mt-4 text-sm"></p>
+                </div>
+
+                <!-- Student List Table -->
+                <h4 class="text-lg font-medium mb-4 mt-8">Current Students (${data.students.length})</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profile</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Father</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enrollment Date</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${data.students.map(s => `
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                                            ${s.profileImage ? 
+                                                `<img src="${s.profileImage}" alt="${s.name}" class="w-full h-full object-cover">` : 
+                                                `<div class="w-full h-full flex items-center justify-center bg-primary-teal text-white">
+                                                    <i class="fas fa-user"></i>
+                                                </div>`
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${s.id}</td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div>
+                                            <div class="font-medium">${s.name}</div>
+                                            <div class="text-xs text-gray-500">@${s.username}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div>
+                                            <div class="flex items-center">
+                                                <i class="fas fa-phone text-green-500 mr-2 text-xs"></i>
+                                                <span>${s.phone || 'N/A'}</span>
+                                            </div>
+                                            <div class="text-xs text-gray-500 mt-1">${s.email || ''}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div>
+                                            <div class="font-medium">${s.fatherName || 'N/A'}</div>
+                                            <div class="text-xs text-gray-500">${s.motherName || ''}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        ${s.enrollmentDate || 'N/A'}
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex space-x-3">
+                                            <button onclick="viewStudentProfile('${s.id}')" class="text-blue-600 hover:text-blue-900 flex items-center">
+                                                <i class="fas fa-eye mr-1"></i> View
+                                            </button>
+                                            <button onclick="editStudent('${s.id}')" class="text-yellow-600 hover:text-yellow-900 flex items-center">
+                                                <i class="fas fa-edit mr-1"></i> Edit
+                                            </button>
+                                            <button onclick="deleteStudent('${s.id}')" class="text-red-600 hover:text-red-900 flex items-center">
+                                                <i class="fas fa-trash-alt mr-1"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderGradeManagement() {
+            const studentOptions = data.students.map(s => `<option value="${s.id}">${s.name} (${s.id})</option>`).join('');
+
+            return `
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-graduation-cap text-primary-teal mr-3"></i>Enter/Update Student Grades
+                </h3>
+
+                <!-- Add Grade Form -->
+                <div class="bg-green-50 p-4 rounded-lg mb-6 border border-green-200">
+                    <h4 class="text-lg font-medium mb-3 text-green-800">Record Grade</h4>
+                    <form onsubmit="event.preventDefault(); addGrade(this);" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <select name="studentId" required class="p-3 border rounded-lg bg-white">
+                            <option value="">-- Select Student --</option>
+                            ${studentOptions}
+                        </select>
+                        <input type="text" name="subject" placeholder="Subject Name" required class="p-3 border rounded-lg">
+                        <input type="text" name="grade" placeholder="Grade (A+, 92%)" required class="p-3 border rounded-lg">
+                        <button type="submit" class="btn-primary bg-green-600 hover:bg-green-700 flex items-center justify-center">
+                            <i class="fas fa-plus-circle mr-2"></i>Add Grade
+                        </button>
+                    </form>
+                    <p id="grade-msg" class="mt-2 text-sm"></p>
+                </div>
+
+                <!-- Current Grades Display -->
+                <h4 class="text-lg font-medium mb-3 mt-8">Current Grades By Student</h4>
+                <div class="space-y-4">
+                    ${data.students.map(s => {
+                        const grades = data.grades[s.id] || [];
+                        return `
+                            <div class="border p-4 rounded-lg hover:shadow-md transition">
+                                <h5 class="font-bold text-lg mb-2 flex items-center">
+                                    <i class="fas fa-user-graduate text-gray-500 mr-3"></i>${s.name} (${s.id})
+                                </h5>
+                                ${grades.length > 0 ? `
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                        ${grades.map(g => `
+                                            <div class="bg-white border rounded-lg p-3 flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-medium">${g.subject}</p>
+                                                    <p class="text-sm text-gray-500">Grade</p>
+                                                </div>
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(g.grade)}">
+                                                    ${g.grade}
+                                                </span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : '<p class="text-gray-500 text-sm p-3 bg-gray-50 rounded-lg">No grades recorded.</p>'}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function renderAttendanceManagement() {
+            const studentOptions = data.students.map(s => `<option value="${s.id}">${s.name} (${s.id})</option>`).join('');
+
+            return `
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-calendar-check text-primary-teal mr-3"></i>Record Attendance & Permissions
+                </h3>
+
+                <!-- Attendance/Permission Entry Form -->
+                <div class="bg-yellow-50 p-4 rounded-lg mb-6 border border-yellow-200">
+                    <h4 class="text-lg font-medium mb-3 text-yellow-800">Record Status for a Date</h4>
+                    <form onsubmit="event.preventDefault(); recordAttendance(this);" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <select name="studentId" required class="p-3 border rounded-lg bg-white">
+                            <option value="">-- Select Student --</option>
+                            ${studentOptions}
+                        </select>
+                        <input type="date" name="date" value="${new Date().toISOString().slice(0, 10)}" required class="p-3 border rounded-lg">
+                        <select name="status" required class="p-3 border rounded-lg bg-white">
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Daily Permission">Daily Permission</option>
+                            <option value="Permanent Permission">Permanent Permission</option>
+                        </select>
+                        <input type="text" name="reason" placeholder="Reason (for Permission/Absent)" class="p-3 border rounded-lg">
+                        <button type="submit" class="btn-primary col-span-1 md:col-span-4 bg-yellow-600 hover:bg-yellow-700 flex items-center justify-center">
+                            <i class="fas fa-calendar-plus mr-2"></i>Record Attendance
+                        </button>
+                    </form>
+                    <p id="attendance-msg" class="mt-2 text-sm"></p>
+                </div>
+
+                <!-- Attendance Summary Table -->
+                <h4 class="text-lg font-medium mb-3 mt-8">Attendance Summary</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Present</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Absent</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Permission</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${data.students.map(s => {
+                                const records = data.attendance[s.id] || [];
+                                const summary = records.reduce((acc, entry) => {
+                                    if (entry.status === 'Present') acc.present++;
+                                    else if (entry.status === 'Absent') acc.absent++;
+                                    else if (entry.status.includes('Permission')) acc.permission++;
+                                    return acc;
+                                }, { present: 0, absent: 0, permission: 0 });
+                                
+                                // Last 5 permissions/absences for detail
+                                const lastDetails = records.filter(r => r.status !== 'Present').slice(-5).reverse().map(r => 
+                                    `${r.date} (${r.status}${r.reason ? ': ' + r.reason : ''})`
+                                ).join('<br>');
+
+                                return `
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${s.name}</td>
+                                        <td class="px-4 py-4 text-center text-sm">
+                                            <span class="inline-flex items-center justify-center w-8 h-8 bg-green-100 text-green-800 rounded-full font-bold">${summary.present}</span>
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-sm">
+                                            <span class="inline-flex items-center justify-center w-8 h-8 bg-red-100 text-red-800 rounded-full font-bold">${summary.absent}</span>
+                                        </td>
+                                        <td class="px-4 py-4 text-center text-sm">
+                                            <span class="inline-flex items-center justify-center w-8 h-8 bg-yellow-100 text-yellow-800 rounded-full font-bold">${summary.permission}</span>
+                                        </td>
+                                        <td class="px-4 py-4 text-sm text-gray-700">${lastDetails || 'No recent details.'}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderHomeCMS() {
+            const home = data.homeContent;
+            return `
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-edit text-primary-teal mr-3"></i>Home Page Content Management
+                </h3>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
+                    <form onsubmit="event.preventDefault(); updateHomeContent(this);">
+                        <div class="mb-4">
+                            <label for="cms-title" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="fas fa-heading mr-2"></i>Page Title
+                            </label>
+                            <input type="text" id="cms-title" name="title" value="${home.title}" required class="w-full p-3 border rounded-lg">
+                        </div>
+                        <div class="mb-4">
+                            <label for="cms-body" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="fas fa-align-left mr-2"></i>Page Body Text
+                            </label>
+                            <textarea id="cms-body" name="body" rows="3" required class="w-full p-3 border rounded-lg">${home.body}</textarea>
+                        </div>
+                        <div class="mb-6">
+                            <label for="cms-features" class="block text-sm font-medium text-gray-700 mb-1">
+                                <i class="fas fa-list-check mr-2"></i>Features (One per line)
+                            </label>
+                            <textarea id="cms-features" name="features" rows="5" required class="w-full p-3 border rounded-lg">${home.features.join('\n')}</textarea>
+                        </div>
+                        <button type="submit" class="btn-primary bg-purple-600 hover:bg-purple-800 flex items-center">
+                            <i class="fas fa-save mr-2"></i>Save Home Page Content
+                        </button>
+                    </form>
+                    <p id="cms-msg" class="mt-2 text-sm"></p>
+                </div>
+                <div class="flex items-center justify-between mt-6 p-4 bg-blue-50 rounded-lg">
+                    <div class="text-blue-700">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span>Logout to see changes on the login page</span>
+                    </div>
+                    <button onclick="logout()" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderUnauthorized() {
+            return `
+                <div class="max-w-md mx-auto card p-8 text-center bg-red-50 border border-red-200 mt-8">
+                    <i class="fas fa-ban text-5xl text-red-500 mb-4"></i>
+                    <h2 class="text-3xl font-bold text-red-700 mb-4">Access Denied</h2>
+                    <p class="text-red-600 mb-6">You are not authorized to view this page. Please log in with the correct credentials.</p>
+                    <button class="btn-primary bg-red-500 hover:bg-red-700 flex items-center justify-center mx-auto" onclick="showView('login')">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- IMAGE HANDLING FUNCTIONS ---
+
+        function previewProfileImage(input) {
+            const preview = document.getElementById('previewImage');
+            const previewContainer = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    // Hide the icon
+                    const icon = previewContainer.querySelector('.fa-user');
+                    if (icon) {
+                        icon.style.display = 'none';
+                    }
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- STUDENT PROFILE FUNCTIONS ---
+
+        function addStudent(form) {
+            const formData = new FormData(form);
+            const fileInput = form.querySelector('input[name="profileImage"]');
+            
+            // Check if username exists
+            if (data.students.some(s => s.username === formData.get('username')) || 
+                data.admins.some(a => a.username === formData.get('username'))) {
+                document.getElementById('student-msg').innerHTML = `
+                    <div class="p-3 bg-red-100 text-red-700 rounded-lg flex items-center">
+                        <i class="fas fa-exclamation-circle mr-3"></i>
+                        <span>Error: Username already exists.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            const newStudent = {
+                id: generateId('S'),
+                name: formData.get('name'),
+                username: formData.get('username'),
+                password: formData.get('password'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                familyPhone: formData.get('familyPhone'),
+                address: formData.get('address'),
+                enrollmentDate: formData.get('enrollmentDate'),
+                birthDate: formData.get('birthDate'),
+                gender: formData.get('gender'),
+                profileImage: ''
+            };
+
+            // Handle image upload
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newStudent.profileImage = e.target.result;
+                    completeStudentAdd(newStudent, form);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                completeStudentAdd(newStudent, form);
+            }
+        }
+
+        function completeStudentAdd(student, form) {
+            data.students.push(student);
+            data.grades[student.id] = [];
+            data.attendance[student.id] = [];
+            saveData();
+            form.reset();
+            
+            // Reset image preview
+            const preview = document.getElementById('previewImage');
+            preview.src = '';
+            preview.classList.add('hidden');
+            const previewContainer = document.getElementById('imagePreview');
+            const icon = previewContainer.querySelector('.fa-user');
+            if (icon) {
+                icon.style.display = 'block';
+            }
+            
+            document.getElementById('student-msg').innerHTML = `
+                <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                    <i class="fas fa-check-circle mr-3"></i>
+                    <span>Success: Student <strong>${student.name}</strong> added (ID: ${student.id}).</span>
+                </div>
+            `;
+            renderAdminContent();
+        }
+
+        function deleteStudent(studentId) {
+            if (!confirm('Are you sure you want to delete this student and ALL their data?')) return;
+            data.students = data.students.filter(s => s.id !== studentId);
+            delete data.grades[studentId];
+            delete data.attendance[studentId];
+            saveData();
+            renderAdminContent();
+        }
+
+        function viewStudentProfile(studentId) {
+            const student = data.students.find(s => s.id === studentId);
+            const grades = data.grades[studentId] || [];
+            const attendance = data.attendance[studentId] || [];
+            
+            // Calculate days since enrollment
+            const enrollmentDate = new Date(student.enrollmentDate);
+            const today = new Date();
+            const daysSinceEnrollment = Math.floor((today - enrollmentDate) / (1000 * 60 * 60 * 24));
+            
+            const modalHtml = `
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+                        <!-- Modal Header -->
+                        <div class="flex justify-between items-center pb-3 border-b">
+                            <h3 class="text-2xl font-bold text-gray-900">Student Profile: ${student.name}</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Modal Content -->
+                        <div class="mt-6">
+                            <div class="flex flex-col md:flex-row gap-6 mb-6">
+                                <!-- Profile Image -->
+                                <div class="flex-shrink-0">
+                                    <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-gray-200">
+                                        ${student.profileImage ? 
+                                            `<img src="${student.profileImage}" alt="${student.name}" class="w-full h-full object-cover">` : 
+                                            `<div class="w-full h-full flex items-center justify-center bg-primary-teal text-white text-6xl">
+                                                <i class="fas fa-user"></i>
+                                            </div>`
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <!-- Profile Details -->
+                                <div class="flex-grow">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Student ID</label>
+                                            <p class="font-semibold">${student.id}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Username</label>
+                                            <p class="font-semibold">@${student.username}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Phone</label>
+                                            <p class="font-semibold">${student.phone || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Email</label>
+                                            <p class="font-semibold">${student.email || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Address</label>
+                                            <p class="font-semibold">${student.address || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Family Phone</label>
+                                            <p class="font-semibold">${student.familyPhone || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Enrollment Date</label>
+                                            <p class="font-semibold">${student.enrollmentDate || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Days Enrolled</label>
+                                            <p class="font-semibold">${daysSinceEnrollment} days</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Birth Date</label>
+                                            <p class="font-semibold">${student.birthDate || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-500">Gender</label>
+                                            <p class="font-semibold">${student.gender || 'N/A'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Grades Section -->
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold mb-3">Grades</h4>
+                                ${grades.length > 0 ? 
+                                    `<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        ${grades.map(g => `
+                                            <div class="bg-gray-50 p-3 rounded-lg">
+                                                <div class="font-medium">${g.subject}</div>
+                                                <div class="text-2xl font-bold ${getGradeColor(g.grade).split(' ')[1]}">${g.grade}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>` : 
+                                    '<p class="text-gray-500">No grades recorded</p>'
+                                }
+                            </div>
+                            
+                            <!-- Attendance Summary -->
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3">Attendance Summary</h4>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="bg-green-50 p-4 rounded-lg text-center">
+                                        <div class="text-3xl font-bold text-green-700">${attendance.filter(a => a.status === 'Present').length}</div>
+                                        <div class="text-sm text-green-600">Present</div>
+                                    </div>
+                                    <div class="bg-red-50 p-4 rounded-lg text-center">
+                                        <div class="text-3xl font-bold text-red-700">${attendance.filter(a => a.status === 'Absent').length}</div>
+                                        <div class="text-sm text-red-600">Absent</div>
+                                    </div>
+                                    <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                                        <div class="text-3xl font-bold text-yellow-700">${attendance.filter(a => a.status.includes('Permission')).length}</div>
+                                        <div class="text-sm text-yellow-600">Permissions</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Modal Footer -->
+                        <div class="mt-6 pt-6 border-t flex justify-end space-x-3">
+                            <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                Close
+                            </button>
+                            <button onclick="editStudent('${studentId}')" class="btn-primary bg-yellow-600 hover:bg-yellow-700">
+                                <i class="fas fa-edit mr-2"></i>Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.innerHTML = modalHtml;
+            modalDiv.id = 'profileModal';
+            document.body.appendChild(modalDiv);
+        }
+
+        function closeModal() {
+            const modals = document.querySelectorAll('#profileModal, #editModal, #updateProfileModal, #passwordModal');
+            modals.forEach(modal => {
+                if (modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        function editStudent(studentId) {
+            const student = data.students.find(s => s.id === studentId);
+            closeModal(); // Close view modal if open
+            
+            // Create edit form modal
+            const modalHtml = `
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+                        <div class="flex justify-between items-center pb-3 border-b">
+                            <h3 class="text-2xl font-bold text-gray-900">Edit Student: ${student.name}</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <form onsubmit="event.preventDefault(); updateStudentInfo('${studentId}', this)" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                        <input type="text" name="name" value="${student.name}" required class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                        <input type="text" name="username" value="${student.username}" required class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                        <input type="text" name="phone" value="${student.phone || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                        <input type="email" name="email" value="${student.email || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                        <input type="text" name="address" value="${student.address || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Family Phone</label>
+                                        <input type="text" name="familyPhone" value="${student.familyPhone || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Birth Date</label>
+                                        <input type="date" name="birthDate" value="${student.birthDate || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                        <select name="gender" class="w-full p-2 border rounded">
+                                            <option value="">Select Gender</option>
+                                            <option value="Male" ${student.gender === 'Male' ? 'selected' : ''}>Male</option>
+                                            <option value="Female" ${student.gender === 'Female' ? 'selected' : ''}>Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                                    <input type="file" name="profileImage" accept="image/*" class="w-full p-2 border rounded">
+                                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep current image</p>
+                                </div>
+                                
+                                <div class="pt-4 border-t flex justify-end space-x-3">
+                                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-save mr-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.innerHTML = modalHtml;
+            modalDiv.id = 'editModal';
+            document.body.appendChild(modalDiv);
+        }
+
+        function updateStudentInfo(studentId, form) {
+            const studentIndex = data.students.findIndex(s => s.id === studentId);
+            if (studentIndex === -1) return;
+            
+            const formData = new FormData(form);
+            const fileInput = form.querySelector('input[name="profileImage"]');
+            
+            // Update student data
+            data.students[studentIndex].name = formData.get('name');
+            data.students[studentIndex].username = formData.get('username');
+            data.students[studentIndex].phone = formData.get('phone');
+            data.students[studentIndex].email = formData.get('email');
+            data.students[studentIndex].address = formData.get('address');
+            data.students[studentIndex].familyPhone = formData.get('familyPhone');
+            data.students[studentIndex].birthDate = formData.get('birthDate');
+            data.students[studentIndex].gender = formData.get('gender');
+            
+            // Update profile image if new one is provided
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    data.students[studentIndex].profileImage = e.target.result;
+                    completeStudentUpdate();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                completeStudentUpdate();
+            }
+            
+            function completeStudentUpdate() {
+                saveData();
+                closeModal();
+                renderAdminContent();
+                
+                // If current user is the student being edited, refresh their dashboard
+                if (state.user && state.user.studentId === studentId) {
+                    state.user.name = data.students[studentIndex].name;
+                    renderAppView();
+                }
+            }
+        }
+
+        function updateStudentProfile(studentId) {
+            const student = data.students.find(s => s.id === studentId);
+            
+            const modalHtml = `
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+                        <div class="flex justify-between items-center pb-3 border-b">
+                            <h3 class="text-2xl font-bold text-gray-900">Update Your Profile</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <form onsubmit="event.preventDefault(); saveStudentProfile('${studentId}', this)" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <input type="text" name="phone" value="${student.phone || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <input type="email" name="email" value="${student.email || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                        <input type="text" name="address" value="${student.address || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Family Phone</label>
+                                        <input type="text" name="familyPhone" value="${student.familyPhone || ''}" class="w-full p-2 border rounded">
+                                    </div>
+                                </div>
+                                
+                                <div class="pt-4 border-t flex justify-end space-x-3">
+                                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-save mr-2"></i>Save Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.innerHTML = modalHtml;
+            modalDiv.id = 'updateProfileModal';
+            document.body.appendChild(modalDiv);
+        }
+
+        function saveStudentProfile(studentId, form) {
+            const studentIndex = data.students.findIndex(s => s.id === studentId);
+            if (studentIndex === -1) return;
+            
+            const formData = new FormData(form);
+            
+            // Only allow updating certain fields for students
+            data.students[studentIndex].phone = formData.get('phone');
+            data.students[studentIndex].email = formData.get('email');
+            data.students[studentIndex].address = formData.get('address');
+            data.students[studentIndex].familyPhone = formData.get('familyPhone');
+            
+            saveData();
+            closeModal();
+            renderAppView(); // Refresh the dashboard
+        }
+
+        function changePassword(studentId) {
+            const modalHtml = `
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+                        <div class="flex justify-between items-center pb-3 border-b">
+                            <h3 class="text-xl font-bold text-gray-900">Change Password</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <form onsubmit="event.preventDefault(); savePassword('${studentId}', this)" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                    <input type="password" name="currentPassword" required class="w-full p-2 border rounded">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                    <input type="password" name="newPassword" required class="w-full p-2 border rounded">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                    <input type="password" name="confirmPassword" required class="w-full p-2 border rounded">
+                                </div>
+                                
+                                <div class="pt-4 border-t flex justify-end space-x-3">
+                                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fas fa-key mr-2"></i>Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.innerHTML = modalHtml;
+            modalDiv.id = 'passwordModal';
+            document.body.appendChild(modalDiv);
+        }
+
+        function savePassword(studentId, form) {
+            const formData = new FormData(form);
+            const studentIndex = data.students.findIndex(s => s.id === studentId);
+            
+            if (studentIndex === -1) return;
+            
+            const currentPassword = formData.get('currentPassword');
+            const newPassword = formData.get('newPassword');
+            const confirmPassword = formData.get('confirmPassword');
+            
+            // Verify current password
+            if (data.students[studentIndex].password !== currentPassword) {
+                alert('Current password is incorrect');
+                return;
+            }
+            
+            // Check if new passwords match
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+            
+            // Update password
+            data.students[studentIndex].password = newPassword;
+            saveData();
+            
+            closeModal();
+            alert('Password changed successfully!');
+        }
+
+        // --- ADMIN ACTION HANDLERS ---
+        
+        function addGrade(form) {
+            const formData = new FormData(form);
+            const studentId = formData.get('studentId');
+            const newGrade = {
+                subject: formData.get('subject'),
+                grade: formData.get('grade'),
+            };
+
+            if (!data.grades[studentId]) {
+                data.grades[studentId] = [];
+            }
+
+            // Check if subject already exists for the student and update it
+            const existingGradeIndex = data.grades[studentId].findIndex(g => g.subject.toLowerCase() === newGrade.subject.toLowerCase());
+            if (existingGradeIndex > -1) {
+                data.grades[studentId][existingGradeIndex] = newGrade; // Update existing
+                document.getElementById('grade-msg').innerHTML = `
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        <span>Success: Grade for <strong>${newGrade.subject}</strong> updated for student ID ${studentId}.</span>
+                    </div>
+                `;
+            } else {
+                data.grades[studentId].push(newGrade); // Add new
+                document.getElementById('grade-msg').innerHTML = `
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        <span>Success: Grade for <strong>${newGrade.subject}</strong> added for student ID ${studentId}.</span>
+                    </div>
+                `;
+            }
+            
+            saveData();
+            form.reset();
+            renderAdminContent();
+        }
+
+        function recordAttendance(form) {
+            const formData = new FormData(form);
+            const studentId = formData.get('studentId');
+            const newRecord = {
+                date: formData.get('date'),
+                status: formData.get('status'),
+                reason: formData.get('reason'),
+            };
+
+            if (!data.attendance[studentId]) {
+                data.attendance[studentId] = [];
+            }
+            
+            // Prevent duplicate entries for the same date
+            const existingIndex = data.attendance[studentId].findIndex(r => r.date === newRecord.date);
+            if (existingIndex > -1) {
+                data.attendance[studentId][existingIndex] = newRecord; // Overwrite
+                document.getElementById('attendance-msg').innerHTML = `
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        <span>Attendance for <strong>${newRecord.date}</strong> updated for student ID ${studentId}.</span>
+                    </div>
+                `;
+            } else {
+                data.attendance[studentId].push(newRecord);
+                document.getElementById('attendance-msg').innerHTML = `
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        <span>Attendance for <strong>${newRecord.date}</strong> recorded for student ID ${studentId}.</span>
+                    </div>
+                `;
+            }
+
+            saveData();
+            form.querySelector('input[name="reason"]').value = ''; // Clear reason field only
+            renderAdminContent();
+        }
+
+        function updateHomeContent(form) {
+            const formData = new FormData(form);
+            data.homeContent.title = formData.get('title');
+            data.homeContent.body = formData.get('body');
+            data.homeContent.features = formData.get('features').split('\n').map(f => f.trim()).filter(f => f);
+
+            saveData();
+            document.getElementById('cms-msg').innerHTML = `
+                <div class="p-3 bg-green-100 text-green-700 rounded-lg flex items-center">
+                    <i class="fas fa-check-circle mr-3"></i>
+                    <span>Home Page Content Saved Successfully!</span>
+                </div>
+            `;
+            setTimeout(() => {
+                document.getElementById('cms-msg').innerHTML = '';
+            }, 3000);
+        }
+
+        // --- EVENT LISTENERS ---
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Support link
+            document.getElementById('support-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('support');
+            });
+            
+            // Footer support link
+            document.getElementById('footer-support-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('support');
+            });
+            
+            // Footer login link
+            document.getElementById('footer-login-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('login');
+            });
+            
+            // Back to login from support
+            document.getElementById('back-to-login').addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('login');
+            });
+            
+            // Home link
+            document.getElementById('home-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (state.isLoggedIn) {
+                    showView('app');
+                    renderAppView();
+                } else {
+                    showView('login');
+                }
+            });
+
+            // Initialize the app
+            updateUI();
+            showView('login');
+        });
+    </script>
+</body>
+</html>
