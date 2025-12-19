@@ -824,7 +824,7 @@
                                             <i class="fas fa-phone text-blue-600"></i>
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-500">Phone</p>
+                                            <p class="text-sm text-gray-500">የተማሪ ስልክ ቁጥር</p>
                                             <p class="font-medium">${student.phone || 'Not provided'}</p>
                                         </div>
                                     </div>
@@ -833,7 +833,7 @@
                                             <i class="fas fa-home text-green-600"></i>
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-500">Address</p>
+                                            <p class="text-sm text-gray-500">የተማሪው አድራሻ</p>
                                             <p class="font-medium">${student.address || 'Not provided'}</p>
                                         </div>
                                     </div>
@@ -842,7 +842,7 @@
                                             <i class="fas fa-calendar-alt text-purple-600"></i>
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-500">Enrolled Since</p>
+                                            <p class="text-sm text-gray-500">ሰንበት የጀመረበት ቀን</p>
                                             <p class="font-medium">${student.enrollmentDate || 'N/A'}</p>
                                         </div>
                                     </div>
@@ -852,38 +852,32 @@
                                 <!-- Family Information -->
                                 <div class="bg-gray-50 p-4 rounded-lg mb-4">
                                     <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                                        <i class="fas fa-users text-primary-teal mr-3"></i>Family Information
+                                        <i class="fas fa-users text-primary-teal mr-3"></i>የቤተሰብ መረጃ
                                     </h4>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <p class="text-sm text-gray-500">Father's Name</p>
+                                            <p class="text-sm text-gray-500">የ አባት ስም</p>
                                             <p class="font-medium">${student.fatherName || 'Not provided'}</p>
-                                            ${student.fatherPhone ? `<p class="text-xs text-gray-500 mt-1">Phone: ${student.fatherPhone}</p>` : ''}
+                                            ${student.fatherPhone ? `<p class="text-xs text-gray-500 mt-1">የ አባት ስልክ ቁጥር: ${student.fatherPhone}</p>` : ''}
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-500">Mother's Name</p>
+                                            <p class="text-sm text-gray-500">የ እናት ስም</p>
                                             <p class="font-medium">${student.motherName || 'Not provided'}</p>
-                                            ${student.motherPhone ? `<p class="text-xs text-gray-500 mt-1">Phone: ${student.motherPhone}</p>` : ''}
+                                            ${student.motherPhone ? `<p class="text-xs text-gray-500 mt-1">የ እናት ስልክ ቁጥር: ${student.motherPhone}</p>` : ''}
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <!-- Additional Info -->
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  
+                                    
                                     <div>
-                                        <p class="text-sm text-gray-500">Email</p>
-                                        <p class="font-medium">${student.email || 'Not provided'}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Family Phone</p>
-                                        <p class="font-medium">${student.familyPhone || 'Not provided'}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Birth Date</p>
+                                        <p class="text-sm text-gray-500">የተማሪው የትውልድ ቀን</p>
                                         <p class="font-medium">${student.birthDate || 'Not provided'}</p>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-gray-500">Gender</p>
+                                        <p class="text-sm text-gray-500">ፃታ</p>
                                         <p class="font-medium">${student.gender || 'Not provided'}</p>
                                     </div>
                                 </div>
@@ -2155,4 +2149,5 @@
 </body>
 
 </html>
+
 
